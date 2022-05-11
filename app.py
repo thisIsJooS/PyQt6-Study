@@ -1,6 +1,8 @@
 import sys
-from PyQt6.QtWidgets import QApplication, QWidget
-
+from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip
+from PyQt6.QtGui import QIcon
+from PyQt6.QtCore import QCoreApplication
+from PyQt6.QtGui import QFont
 
 class MyApp(QWidget):
 
@@ -9,13 +11,21 @@ class MyApp(QWidget):
         self.initUI()
 
     def initUI(self):
+        QToolTip.setFont(QFont('SansSerif', 10))
+        self.setToolTip('This is <b>QWidhet</b> widget')
+        
+        btn = QPushButton('Quit', self) # (버튼에 표시될 텍스트, 버튼이 위치할 부모 위젯)
+        btn.move(50, 50)
+        btn.resize(btn.sizeHint())
+        btn.clicked.connect(QCoreApplication.instance().quit)
+        
         self.setWindowTitle('My First Application')
-        self.move(300, 300)
-        self.resize(400, 200)
+        self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
+        self.setGeometry(300, 300, 300, 200)    # move()와 resize()를 하나로 합친 메서드
         self.show()
 
 
 if __name__ == '__main__':
-   app = QApplication(sys.argv)
-   ex = MyApp()
-   sys.exit(app.exec())
+    app = QApplication(sys.argv)
+    ex = MyApp()
+    sys.exit(app.exec())
