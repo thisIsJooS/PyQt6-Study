@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit
+from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
 
@@ -52,18 +52,21 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # 그리드 레이아웃
-        grid = QGridLayout()
-        widget.setLayout(grid)
+        btn1 = QPushButton('&Button1', self)
+        btn1.setCheckable(True) # 선택되거나 선택되지 않은 상태를 유지할 수 있음
+        btn1.toggle()   # 버튼의 상태 변경. 즉 이 버튼은 프로그램이 시작될 떄 선택되어 있다
 
-        grid.addWidget(QLabel('Title:'), 0, 0)
-        grid.addWidget(QLabel('Author:'), 1, 0)
-        grid.addWidget(QLabel('Review:'), 2, 0)
+        btn2 = QPushButton(self)
+        btn2.setText('Button&2') # 이 버튼의 단축키는 Alt+2
 
-        grid.addWidget(QLineEdit(), 0, 1)
-        grid.addWidget(QLineEdit(), 1, 1)
-        grid.addWidget(QTextEdit(), 2, 1)
+        btn3 = QPushButton('Button3', self)
+        btn3.setEnabled(False)  # 버튼 비활성화
 
+        vbox = QVBoxLayout()
+        vbox.addWidget(btn1)
+        vbox.addWidget(btn2)
+        vbox.addWidget(btn3)
+        widget.setLayout(vbox)
         
         # Main
         self.setWindowTitle('My First Application')
