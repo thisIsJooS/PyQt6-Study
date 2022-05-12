@@ -1,6 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
 from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout, QCheckBox
+from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
 
@@ -8,6 +9,10 @@ class MyApp(QMainWindow):
 
     def __init__(self):
         super().__init__()
+        self.setWindowTitle('My First Application')
+        self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
+        self.resize(800, 600)
+        self.center() # 창이 화면의 가운데에 위치하게 함
         self.initUI()
 
     def initUI(self):
@@ -52,18 +57,24 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QCheckBox
-        cb = QCheckBox('Show title', self)
-        cb.move(400, 400)
-        cb.toggle() # 체크된 상태로 나타나게 함
-        cb.stateChanged.connect(self.changeTitle) # 상태가 바뀔 때 발생하는 시그널을 changeTitle()에 연결
+        # QComboBox
+        vbox = QVBoxLayout()
+        self.lbl = QLabel('Option1', self)
+        self.lbl.move(400, 400)
+
+        self.combo = QComboBox(self)
+        self.combo.addItem('Option1')
+        self.combo.addItem('Option2')
+        self.combo.addItem('Option3')
+        self.combo.addItem('Option4')
+        self.combo.currentTextChanged.connect(self.item_selected)
+
+        vbox.addWidget(self.combo)
+        vbox.addWidget(self.lbl)
         
-        
+        widget.setLayout(vbox)
+
         # Main
-        self.setWindowTitle('My First Application')
-        self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
-        self.resize(800, 600)
-        self.center() # 창이 화면의 가운데에 위치하게 함
         self.show()
 
 
@@ -74,11 +85,9 @@ class MyApp(QMainWindow):
         self.move(qr.topLeft()) # 현재 창을 화면의 중심으로 이동했던 직사각형(qr)의 위치로 이동시킴.
 
     
-    def changeTitle(self, state):
-        if state == Qt.CheckState.Checked.value:
-            self.setWindowTitle('QCheckBox')
-        else:
-            self.setWindowTitle(' ')
+    def item_selected(self):
+        item = self.combo.currentText()
+        self.lbl.setText(f"You have selected : {item}")
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
