@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout
+from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout, QCheckBox
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
 
@@ -52,29 +52,11 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QLabel
-        label1 = QLabel('First Label', self)
-        label1.setAlignment(Qt.AlignmentFlag.AlignCenter)   # 수평, 수직 방향 모두 가운데 위치
-
-        label2 = QLabel('Second Label', self)
-        label2.setAlignment(Qt.AlignmentFlag.AlignVCenter)  # 수직방향으로만 가운데 위치
-
-        font1 = label1.font()
-        font1.setPointSize(20)
-
-        font2 = label2.font()
-        font2.setFamily('Times New Roman')
-        font2.setBold(True)
-
-        label1.setFont(font1)
-        label2.setFont(font2)
-        
-        layout = QVBoxLayout()
-        layout.addWidget(label1)
-        layout.addWidget(label2)
-
-        widget.setLayout(layout)
-        
+        # QCheckBox
+        cb = QCheckBox('Show title', self)
+        cb.move(400, 400)
+        cb.toggle() # 체크된 상태로 나타나게 함
+        cb.stateChanged.connect(self.changeTitle) # 상태가 바뀔 때 발생하는 시그널을 changeTitle()에 연결
         
         
         # Main
@@ -91,6 +73,12 @@ class MyApp(QMainWindow):
         qr.moveCenter(cp)   # 창의 직사각형 위치를 화면의 중심의 위치로 이동
         self.move(qr.topLeft()) # 현재 창을 화면의 중심으로 이동했던 직사각형(qr)의 위치로 이동시킴.
 
+    
+    def changeTitle(self, state):
+        if state == Qt.CheckState.Checked.value:
+            self.setWindowTitle('QCheckBox')
+        else:
+            self.setWindowTitle(' ')
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
