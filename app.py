@@ -1,5 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
+from PyQt6.QtWidgets import QLabel, QVBoxLayout
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
 
@@ -10,9 +11,12 @@ class MyApp(QMainWindow):
         self.initUI()
 
     def initUI(self):
+        widget = QWidget(self)
+        self.setCentralWidget(widget)
+        
         # 툴팁
         QToolTip.setFont(QFont('SansSerif', 10))
-        self.setToolTip('This is <b>QWidhet</b> widget')
+        self.setToolTip('This is <b>QWidget</b> widget')
         
         # 버튼
         btn = QPushButton('Quit', self) # (버튼에 표시될 텍스트, 버튼이 위치할 부모 위젯)
@@ -48,12 +52,38 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
+        # 스타일
+        lbl_red = QLabel('Red')
+        lbl_green = QLabel('Green')
+        lbl_blue = QLabel('Blue')
+        
+        lbl_red.setStyleSheet("color: red;"
+                             "border-style: solid;"
+                             "border-width: 2px;"
+                             "border-color: #FA8072;"
+                             "border-radius: 3px")
+        lbl_green.setStyleSheet("color: green;"
+                               "background-color: #7FFFD4")
+        lbl_blue.setStyleSheet("color: blue;"
+                              "background-color: #87CEFA;"
+                              "border-style: dashed;"
+                              "border-width: 3px;"
+                              "border-color: #1E90FF")
+        
+        vbox = QVBoxLayout()
+        vbox.addWidget(lbl_red)
+        vbox.addWidget(lbl_green)
+        vbox.addWidget(lbl_blue)
+        widget.setLayout(vbox)
+
+        
         # Main
         self.setWindowTitle('My First Application')
         self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
         self.resize(800, 600)
         self.center() # 창이 화면의 가운데에 위치하게 함
         self.show()
+
 
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
