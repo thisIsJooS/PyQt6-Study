@@ -1,9 +1,8 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtGui import QIcon
+from PyQt6.QtGui import QIcon, QAction
 from PyQt6.QtCore import QCoreApplication
 from PyQt6.QtGui import QFont
-
 
 class MyApp(QMainWindow):
 
@@ -25,6 +24,18 @@ class MyApp(QMainWindow):
         # 상태바
         self.statusBar().showMessage('Ready')
         
+        # 메뉴바
+        exitAction = QAction(QIcon('exit.png'), 'Exit', self)
+        exitAction.setShortcut('Ctrl+Q')
+        exitAction.setStatusTip('Exit application')
+        exitAction.triggered.connect(QApplication.quit)
+        menubar = self.menuBar()
+        menubar.setNativeMenuBar(False)
+        filemenu = menubar.addMenu('&File')
+        filemenu.addAction(exitAction)
+
+        
+        # Main
         self.setWindowTitle('My First Application')
         self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
         self.setGeometry(300, 300, 300, 200)    # move()와 resize()를 하나로 합친 메서드
