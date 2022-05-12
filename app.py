@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtWidgets import QLabel, QVBoxLayout, QHBoxLayout
+from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
 
@@ -52,21 +52,17 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # 박스 레이아웃
-        okButton = QPushButton('OK')
-        cancelButton = QPushButton('Cancel')
-        hbox = QHBoxLayout()
-        hbox.addStretch(1)
-        hbox.addWidget(okButton)
-        hbox.addWidget(cancelButton)
-        hbox.addStretch(1)
+        # 그리드 레이아웃
+        grid = QGridLayout()
+        widget.setLayout(grid)
 
-        vbox = QVBoxLayout()
-        vbox.addStretch(8)
-        vbox.addLayout(hbox)
-        vbox.addStretch(1)
+        grid.addWidget(QLabel('Title:'), 0, 0)
+        grid.addWidget(QLabel('Author:'), 1, 0)
+        grid.addWidget(QLabel('Review:'), 2, 0)
 
-        widget.setLayout(vbox)
+        grid.addWidget(QLineEdit(), 0, 1)
+        grid.addWidget(QLineEdit(), 1, 1)
+        grid.addWidget(QTextEdit(), 2, 1)
 
         
         # Main
