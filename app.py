@@ -52,21 +52,30 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        btn1 = QPushButton('&Button1', self)
-        btn1.setCheckable(True) # 선택되거나 선택되지 않은 상태를 유지할 수 있음
-        btn1.toggle()   # 버튼의 상태 변경. 즉 이 버튼은 프로그램이 시작될 떄 선택되어 있다
+        # QLabel
+        label1 = QLabel('First Label', self)
+        label1.setAlignment(Qt.AlignmentFlag.AlignCenter)   # 수평, 수직 방향 모두 가운데 위치
 
-        btn2 = QPushButton(self)
-        btn2.setText('Button&2') # 이 버튼의 단축키는 Alt+2
+        label2 = QLabel('Second Label', self)
+        label2.setAlignment(Qt.AlignmentFlag.AlignVCenter)  # 수직방향으로만 가운데 위치
 
-        btn3 = QPushButton('Button3', self)
-        btn3.setEnabled(False)  # 버튼 비활성화
+        font1 = label1.font()
+        font1.setPointSize(20)
 
-        vbox = QVBoxLayout()
-        vbox.addWidget(btn1)
-        vbox.addWidget(btn2)
-        vbox.addWidget(btn3)
-        widget.setLayout(vbox)
+        font2 = label2.font()
+        font2.setFamily('Times New Roman')
+        font2.setBold(True)
+
+        label1.setFont(font1)
+        label2.setFont(font2)
+        
+        layout = QVBoxLayout()
+        layout.addWidget(label1)
+        layout.addWidget(label2)
+
+        widget.setLayout(layout)
+        
+        
         
         # Main
         self.setWindowTitle('My First Application')
