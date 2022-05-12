@@ -1,8 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtGui import QIcon, QAction
+from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication
-from PyQt6.QtGui import QFont
 
 class MyApp(QMainWindow):
 
@@ -52,8 +51,15 @@ class MyApp(QMainWindow):
         # Main
         self.setWindowTitle('My First Application')
         self.setWindowIcon(QIcon('web.png'))    # 타이틀바의 아이콘
-        self.setGeometry(400, 400, 600, 400)    # move()와 resize()를 하나로 합친 메서드
+        self.resize(800, 600)
+        self.center()
         self.show()
+
+    def center(self):
+        qr = self.frameGeometry()
+        cp = QGuiApplication.primaryScreen().availableGeometry().center()
+        qr.moveCenter(cp)
+        self.move(qr.topLeft())
 
 
 if __name__ == '__main__':
