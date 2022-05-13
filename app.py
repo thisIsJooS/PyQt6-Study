@@ -1,8 +1,7 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout, QCheckBox
-from PyQt6.QtWidgets import QProgressBar
-from PyQt6.QtWidgets import QComboBox
+from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QHBoxLayout, QFrame, QSplitter
+
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt, QBasicTimer
 
@@ -59,37 +58,36 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(exitAction)
         
         # QProgressBar
-        self.pbar = QProgressBar(self)
-        self.pbar.setGeometry(30, 40, 400, 300)
-        
-        self.btn = QPushButton('Start', self)
-        self.btn.move(400, 500)
-        self.btn.clicked.connect(self.doAction)
-        
-        self.timer = QBasicTimer()  # progressbar를 활성화하기 위해 타이머 객체 사용
-        self.step = 0
+        hbox = QHBoxLayout()
 
+        top = QFrame()
+        top.setFrameShape(QFrame.Shape.Box)
+        
+        midleft = QFrame()
+        midleft.setFrameShape(QFrame.Shape.StyledPanel)
+
+        midright = QFrame()
+        midright.setFrameShape(QFrame.Shape.Panel)
+
+        bottom = QFrame()
+        bottom.setFrameShape(QFrame.Shape.WinPanel)
+        bottom.setFrameShadow(QFrame.Shadow.Sunken)
+
+        splitter1 = QSplitter(Qt.Orientation.Horizontal)
+        splitter1.addWidget(midleft)
+        splitter1.addWidget(midright)
+
+        splitter2 = QSplitter(Qt.Orientation.Vertical)
+        splitter2.addWidget(top)
+        splitter2.addWidget(splitter1)
+        splitter2.addWidget(bottom)
+
+        hbox.addWidget(splitter2)
+        widget.setLayout(hbox)
+        
+        
         # Main
         self.show()
-
-    
-    def timerEvent(self, e):    # QObject와 그 자손들은 timerEvent() 이벤트핸들러를 가짐. 오버라이딩
-        if self.step >= 100:
-            self.timer.stop()
-            self.btn.setText('Finished')
-            return
-
-        self.step += 1
-        self.pbar.setValue(self.step)
-    
-    
-    def doAction(self):
-        if self.timer.isActive():
-            self.timer.stop()
-            self.btn.setText('Start')
-        else:
-            self.timer.start(100, self) # (종료시간, 이벤트가 수행될 객체)
-            self.btn.setText('Stop')
 
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
