@@ -1,6 +1,6 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
-from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QHBoxLayout, QFrame, QSplitter
+from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit
 
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
 from PyQt6.QtCore import QCoreApplication, QDateTime, Qt, QBasicTimer
@@ -57,37 +57,22 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QProgressBar
-        hbox = QHBoxLayout()
+        # QLineEdit
+        self.lbl = QLabel(self)
+        self.lbl.move(300, 400)
 
-        top = QFrame()
-        top.setFrameShape(QFrame.Shape.Box)
-        
-        midleft = QFrame()
-        midleft.setFrameShape(QFrame.Shape.StyledPanel)
-
-        midright = QFrame()
-        midright.setFrameShape(QFrame.Shape.Panel)
-
-        bottom = QFrame()
-        bottom.setFrameShape(QFrame.Shape.WinPanel)
-        bottom.setFrameShadow(QFrame.Shadow.Sunken)
-
-        splitter1 = QSplitter(Qt.Orientation.Horizontal)
-        splitter1.addWidget(midleft)
-        splitter1.addWidget(midright)
-
-        splitter2 = QSplitter(Qt.Orientation.Vertical)
-        splitter2.addWidget(top)
-        splitter2.addWidget(splitter1)
-        splitter2.addWidget(bottom)
-
-        hbox.addWidget(splitter2)
-        widget.setLayout(hbox)
-        
+        qle = QLineEdit(self)
+        qle.move(300, 300)
+        qle.textChanged[str].connect(self.onChanged)
         
         # Main
         self.show()
+
+
+    def onChanged(self, text):
+        self.lbl.setText(text)
+        self.lbl.adjustSize()
+
 
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
