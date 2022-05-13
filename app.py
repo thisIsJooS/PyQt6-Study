@@ -1,9 +1,10 @@
 import sys
 from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QToolTip, QMainWindow
 from PyQt6.QtWidgets import QLabel, QGridLayout, QLabel, QLineEdit, QTextEdit, QVBoxLayout, QCheckBox
+from PyQt6.QtWidgets import QProgressBar
 from PyQt6.QtWidgets import QComboBox
 from PyQt6.QtGui import QIcon, QAction, QFont, QGuiApplication
-from PyQt6.QtCore import QCoreApplication, QDateTime, Qt
+from PyQt6.QtCore import QCoreApplication, QDateTime, Qt, QBasicTimer
 
 class MyApp(QMainWindow):
 
@@ -57,26 +58,38 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QComboBox
-        vbox = QVBoxLayout()
-        self.lbl = QLabel('Option1', self)
-        self.lbl.move(400, 400)
-
-        self.combo = QComboBox(self)
-        self.combo.addItem('Option1')
-        self.combo.addItem('Option2')
-        self.combo.addItem('Option3')
-        self.combo.addItem('Option4')
-        self.combo.currentTextChanged.connect(self.item_selected)
-
-        vbox.addWidget(self.combo)
-        vbox.addWidget(self.lbl)
+        # QProgressBar
+        self.pbar = QProgressBar(self)
+        self.pbar.setGeometry(30, 40, 400, 300)
         
-        widget.setLayout(vbox)
+        self.btn = QPushButton('Start', self)
+        self.btn.move(400, 500)
+        self.btn.clicked.connect(self.doAction)
+        
+        self.timer = QBasicTimer()  # progressbar를 활성화하기 위해 타이머 객체 사용
+        self.step = 0
 
         # Main
         self.show()
 
+    
+    def timerEvent(self, e):    # QObject와 그 자손들은 timerEvent() 이벤트핸들러를 가짐. 오버라이딩
+        if self.step >= 100:
+            self.timer.stop()
+            self.btn.setText('Finished')
+            return
+
+        self.step += 1
+        self.pbar.setValue(self.step)
+    
+    
+    def doAction(self):
+        if self.timer.isActive():
+            self.timer.stop()
+            self.btn.setText('Start')
+        else:
+            self.timer.start(100, self) # (종료시간, 이벤트가 수행될 객체)
+            self.btn.setText('Stop')
 
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
