@@ -49,23 +49,30 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QPixmap
-        pixmap = QPixmap('Roger_Federer.jpg')
+        # QCalanderWidget
+        calender = QCalendarWidget(self)
+        calender.setGridVisible(True)   # 날짜 사이에 그리드 표시
+        calender.clicked[QDate].connect(self.showDate)
+        
+        self.lbl = QLabel(self)
+        date = calender.selectedDate()  # 디폴트는 현재 날짜
+        self.lbl.setText(date.toString())   
 
-        lbl_img = QLabel()
-        lbl_img.setPixmap(pixmap)
-        lbl_size = QLabel(f'Width: {str(pixmap.width())}, Height: {str(pixmap.height())}')
-        lbl_size.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        vbox = QVBoxLayout()    # 수직박스 레이아웃 이용, 달력과 라벨 수직 배치
+        vbox.addWidget(calender)
+        vbox.addWidget(self.lbl)
 
-        vbox = QVBoxLayout()
-        vbox.addWidget(lbl_img)
-        vbox.addWidget(lbl_size)
         widget.setLayout(vbox)
+        
         
         # Main
         self.show()
 
 
+    def showDate(self, date):
+        self.lbl.setText(date.toString())
+    
+    
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
         cp = QGuiApplication.primaryScreen().availableGeometry().center() # 스크린의 가운데 위치 파악
