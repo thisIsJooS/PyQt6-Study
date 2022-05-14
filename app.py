@@ -49,28 +49,29 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
         
-        # QCalanderWidget
-        calender = QCalendarWidget(self)
-        calender.setGridVisible(True)   # 날짜 사이에 그리드 표시
-        calender.clicked[QDate].connect(self.showDate)
-        
-        self.lbl = QLabel(self)
-        date = calender.selectedDate()  # 디폴트는 현재 날짜
-        self.lbl.setText(date.toString())   
+        # QSpinBox
+        self.lbl1 = QLabel('QSpinBox')
+        self.spinbox = QSpinBox()
+        self.spinbox.setRange(-10, 30)
+        self.spinbox.setSingleStep(2)
+        self.lbl2 = QLabel('0')
 
-        vbox = QVBoxLayout()    # 수직박스 레이아웃 이용, 달력과 라벨 수직 배치
-        vbox.addWidget(calender)
-        vbox.addWidget(self.lbl)
+        self.spinbox.valueChanged.connect(self.value_changed)
+
+        vbox = QVBoxLayout()
+        vbox.addWidget(self.lbl1)
+        vbox.addWidget(self.spinbox)
+        vbox.addWidget(self.lbl2)
+        vbox.addStretch()
 
         widget.setLayout(vbox)
-        
-        
+
         # Main
         self.show()
 
-
-    def showDate(self, date):
-        self.lbl.setText(date.toString())
+    
+    def value_changed(self):
+        self.lbl2.setText(str(self.spinbox.value()))
     
     
     def center(self):
