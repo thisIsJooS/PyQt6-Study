@@ -48,31 +48,24 @@ class MyApp(QMainWindow):
         self.toolbar.addAction(editAction)
         self.toolbar.addAction(printAction)
         self.toolbar.addAction(exitAction)
-        
-        # QSpinBox
-        self.lbl1 = QLabel('QSpinBox')
-        self.spinbox = QSpinBox()
-        self.spinbox.setRange(-10, 30)
-        self.spinbox.setSingleStep(2)
-        self.lbl2 = QLabel('0')
 
-        self.spinbox.valueChanged.connect(self.value_changed)
-
-        vbox = QVBoxLayout()
-        vbox.addWidget(self.lbl1)
-        vbox.addWidget(self.spinbox)
-        vbox.addWidget(self.lbl2)
-        vbox.addStretch()
-
-        widget.setLayout(vbox)
 
         # Main
         self.show()
 
-    
-    def value_changed(self):
-        self.lbl2.setText(str(self.spinbox.value()))
-    
+
+    def closeEvent(self, event):
+        dialog = QMessageBox(self)
+        dialog.setWindowTitle('Message')
+        dialog.setText('Are you sure to quit?')
+        dialog.setStandardButtons(QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No)
+        reply = dialog.exec()
+
+        if reply == QMessageBox.StandardButton.Yes:
+            event.accept()
+        else:
+            event.ignore()
+        
     
     def center(self):
         qr = self.frameGeometry()   # 스크린의 위치와 크기 정보를 가져옴
